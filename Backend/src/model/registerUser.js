@@ -15,6 +15,7 @@ const registerUserSchema = new Schema({
     },
     prn: {
         type: String,
+        default:"-",
         unique: true
     },
     branch: {

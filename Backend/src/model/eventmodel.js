@@ -1,4 +1,4 @@
-import {Schema} from "mongoose";
+import mongoose, {Schema} from "mongoose";
 import RegisterUser from "./registerUser.js";
 const eventModel = new Schema({
     name:{
@@ -37,4 +37,7 @@ const eventModel = new Schema({
     ],
 
 
-})
+});
+
+const Event = mongoose.model("Event",eventModel);
+export default Event;
