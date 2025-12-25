@@ -1,4 +1,5 @@
 import mongoose, {Schema} from "mongoose";
+import Event from "./eventmodel.js";
 
 const userModel = new Schema({
     name:{
@@ -13,15 +14,15 @@ const userModel = new Schema({
     },
     branch:{ type:String},
     number:{
-        type:Number,
+        type:String,
         required:true,
         unique:true
     },
     password:{
         type:String,
         required:true,
-        unique:true
-    }
+    },
+    event:[{type:Schema.Types.ObjectId,ref:'Event'}]
 
 });
 

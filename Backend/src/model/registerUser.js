@@ -8,18 +8,27 @@ const registerUserSchema = new Schema({
     email: {
         type: String,
         required: true,
-        unique: true
+      
     },
     year: {
-        type: Number
+        type: String
     },
     prn: {
         type: String,
         default:"-",
-        unique: true
+       
     },
     branch: {
         type: String
+    },
+    user:{
+        type:Schema.Types.ObjectId,
+        ref:"User",
+        required:true,
+    },
+    event:{
+        type:Schema.Types.ObjectId,
+        ref:"Event"
     }
 }, { timestamps: true });
 

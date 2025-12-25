@@ -2,6 +2,7 @@ import Event from "../model/eventmodel.js";
 import User from "../model/usermodel.js";
 import RegisterUser from "../model/registerUser.js";
 import httpStatus from "http-status";
+
 const addEvent = async (req, res) => {
   try {
     const { name, description, time, location, logo, status, date, price } =
@@ -98,7 +99,34 @@ const registerEvent = async (req, res) => {
   const { year, userId, prn } = req.body;
   try {
     const event = await Event.findById(eventId);
+
+      if (!event) { // check event exist or not 
+      return res.status(404).json({
+        success: false,
+        message: "Event not found"
+      });
+    }
     const user = await User.findById(userId);
+
+     if (!user) { //check user exist or not 
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
+    }
+
+   
+    const alreadyRegistered = await RegisterUser.findOne({
+      user: userId,
+      event: eventId
+    });
+
+     if (alreadyRegistered) { 
+      return res.status(404).json({
+        success: false,
+        message: "User already registered for thiis event"
+      });
+    }
 
     const newRegister = new RegisterUser({
       name: user.name,
@@ -106,12 +134,18 @@ const registerEvent = async (req, res) => {
       prn: prn,
       branch: user.branch,
       email: user.email,
+       user: userId,
+      event: eventId
     });
 
     await newRegister.save();
 
     event.participants.push(newRegister._id);
     await event.save();
+
+    user.event.push(eventId);
+    await user.save();
+    
 
     res
       .status(202)
@@ -125,4 +159,19 @@ const registerEvent = async (req, res) => {
   }
 };
 
-export { getEvents, addEvent, deleteEvent, updateEvent,registerEvent };
+const getParticularEvent = async (req,res)=>{
+
+  try{
+   const {id}=req.params;
+   
+   const event = await Event.findById(id).populate("participants");
+   if(!event){
+    return res.status(httpStatus.NOT_FOUND).json({message:"Event not found", success:false});
+   }
+   res.status(httpStatus.OK).json({message:"Event found.",data:event,success:true});
+  }catch(err){
+    res.status(500).json({message:err.message,success:false});
+  }
+}
+
+export { getEvents, addEvent, deleteEvent, updateEvent,registerEvent,getParticularEvent };
