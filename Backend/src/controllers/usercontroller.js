@@ -56,13 +56,13 @@ const signup = async (req, res)=>{
         });
 
       await  user.save();
-      console.log(user);
+   
       const token = jwt.sign(
         {userId:user._id},
          process.env.JWT_SECRET,
         { expiresIn: "5d" }
       );
-      console.log(token);
+      
             res.cookie("accessToken", token, {
             httpOnly: true,
             secure: false,        

@@ -4,8 +4,7 @@ import httpStatus from "http-status";
 const addEvent = async (req, res) => {
   try {
     const { name, description, time, location, logo, status, date, price } =
-      req.body;
-
+      req.body; 
     const event = new Event({
       name,
       description,
@@ -28,9 +27,9 @@ const addEvent = async (req, res) => {
 
 const deleteEvent = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { eventId } = req.params;
 
-    const event = await Event.findByIdAndDelete(id);
+    const event = await Event.findByIdAndDelete(eventId);
 
     if (!event) {
       return res.status(404).json({
@@ -54,9 +53,9 @@ const deleteEvent = async (req, res) => {
 const updateEvent = async (req, res) => {
   try {
     const newEvent = req.body;
-    const { id } = req.params;
+    const { eventId } = req.params;
 
-    const event = await Event.findByIdAndUpdate(id, newEvent, {
+    const event = await Event.findByIdAndUpdate(eventId, newEvent, {
       new: true,
       runValidators: true,
     });
@@ -94,9 +93,9 @@ const getEvents = async (req, res) => {
 
 const getParticularEvent = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { eventId } = req.params;
 
-    const event = await Event.findById(id).populate("participants");
+    const event = await Event.findById(eventId).populate("participants");
     if (!event) {
       return res
         .status(httpStatus.NOT_FOUND)

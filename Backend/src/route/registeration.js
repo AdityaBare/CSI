@@ -1,14 +1,14 @@
 import {Router} from "express";
 import {registerEvent,cancleRegistration,registiredEvents} from "../controllers/registerationcontroller.js"
 import { getParticularEvent } from "../controllers/eventcontroller.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = Router();
 
 
-
-router.route("/:id").get(getParticularEvent);  
-router.route("/:eventId").post(registerEvent);
-router.route("/:eventId").delete(cancleRegistration);
-router.route("/").get(registiredEvents);
+router.route("/").get(authMiddleware ,registiredEvents);
+router.route("/:eventId").get(authMiddleware ,getParticularEvent);  
+router.route("/:eventId").post(authMiddleware,registerEvent);
+router.route("/:eventId").delete(authMiddleware ,cancleRegistration);
 
 export default router;
