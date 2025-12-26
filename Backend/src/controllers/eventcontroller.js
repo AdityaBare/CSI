@@ -94,37 +94,56 @@ const getEvents = async (req, res) => {
   }
 };
 
-const registerEvent = async (req, res) => {
-  const { eventId } = req.params;
-  const { year, userId, prn } = req.body;
+const getParticularEvent = async (req, res) => {
   try {
+    const { id } = req.params;
+
+    const event = await Event.findById(id).populate("participants");
+    if (!event) {
+      return res
+        .status(httpStatus.NOT_FOUND)
+        .json({ message: "Event not found", success: false });
+    }
+    res
+      .status(httpStatus.OK)
+      .json({ message: "Event found.", data: event, success: true });
+  } catch (err) {
+    res.status(500).json({ message: err.message, success: false });
+  }
+};
+
+const registerEvent = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    const { year, userId, prn } = req.body;
     const event = await Event.findById(eventId);
 
-      if (!event) { // check event exist or not 
+    if (!event) {
+      // check event exist or not
       return res.status(404).json({
         success: false,
-        message: "Event not found"
+        message: "Event not found",
       });
     }
     const user = await User.findById(userId);
 
-     if (!user) { //check user exist or not 
+    if (!user) {
+      //check user exist or not
       return res.status(404).json({
         success: false,
-        message: "User not found"
+        message: "User not found",
       });
     }
 
-   
     const alreadyRegistered = await RegisterUser.findOne({
       user: userId,
-      event: eventId
+      event: eventId,
     });
 
-     if (alreadyRegistered) { 
+    if (alreadyRegistered) {
       return res.status(404).json({
         success: false,
-        message: "User already registered for thiis event"
+        message: "User already registered for thiis event",
       });
     }
 
@@ -134,8 +153,8 @@ const registerEvent = async (req, res) => {
       prn: prn,
       branch: user.branch,
       email: user.email,
-       user: userId,
-      event: eventId
+      user: userId,
+      event: eventId,
     });
 
     await newRegister.save();
@@ -145,33 +164,65 @@ const registerEvent = async (req, res) => {
 
     user.event.push(eventId);
     await user.save();
-    
 
-    res
-      .status(202)
-      .json({
-        message: "Registered successfully",
-        data: newRegister,
-        success: true,
-      });
+    res.status(202).json({
+      message: "Registered successfully",
+      data: newRegister,
+      success: true,
+    });
   } catch (err) {
     res.status(500).json({ message: err.message, success: false });
   }
 };
 
-const getParticularEvent = async (req,res)=>{
+const cancleRegistration = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    const { userId } = req.body;
 
-  try{
-   const {id}=req.params;
-   
-   const event = await Event.findById(id).populate("participants");
-   if(!event){
-    return res.status(httpStatus.NOT_FOUND).json({message:"Event not found", success:false});
-   }
-   res.status(httpStatus.OK).json({message:"Event found.",data:event,success:true});
-  }catch(err){
-    res.status(500).json({message:err.message,success:false});
+    const user = await User.findById(userId);
+    const event = await Event.findById(eventId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: "Event not found",
+      });
+
+    }
+      const registerEvent = await RegisterUser.findOneAndDelete({
+      user: userId,
+      event: eventId,
+    });
+     if (!registerEvent) {
+      return res.status(404).json({
+        success: false,
+        message: "Registration cancelled successfully",
+      });
+    }
+    res.status(202).json({
+      message: "Registration cancle",
+      data: registerEvent,
+      success: true,
+    });
+
+  } catch (err) {
+    res.status(500).json({ message: err.message, success: false });
   }
-}
+};
 
-export { getEvents, addEvent, deleteEvent, updateEvent,registerEvent,getParticularEvent };
+export {
+  getEvents,
+  addEvent,
+  deleteEvent,
+  updateEvent,
+  registerEvent,
+  getParticularEvent,
+  cancleRegistration
+};
