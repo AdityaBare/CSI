@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {addEvent,getEvents,deleteEvent,updateEvent,registerEvent,getParticularEvent,cancleRegistration} from "../controllers/eventcontroller.js"
+import {addEvent,getEvents,deleteEvent,updateEvent,registerEvent,getParticularEvent,cancleRegistration,registiredEvents} from "../controllers/eventcontroller.js"
 const router = Router();
 
 //API for CSI login
@@ -12,5 +12,6 @@ router.route("/:id").delete(deleteEvent);
 router.route("/:id").get(getParticularEvent);   //also for csi login
 router.route("/registration/:eventId").post(registerEvent);
 router.route("/registration/:eventId").delete(cancleRegistration);
+router.route("/registration").get(registiredEvents);
 
 export default router;

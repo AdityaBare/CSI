@@ -1,6 +1,4 @@
 import Event from "../model/eventmodel.js";
-import User from "../model/usermodel.js";
-import RegisterUser from "../model/registerUser.js";
 import httpStatus from "http-status";
 
 const addEvent = async (req, res) => {
@@ -112,110 +110,6 @@ const getParticularEvent = async (req, res) => {
   }
 };
 
-const registerEvent = async (req, res) => {
-  try {
-    const { eventId } = req.params;
-    const { year, userId, prn } = req.body;
-    const event = await Event.findById(eventId);
-
-    if (!event) {
-      // check event exist or not
-      return res.status(404).json({
-        success: false,
-        message: "Event not found",
-      });
-    }
-    const user = await User.findById(userId);
-
-    if (!user) {
-      //check user exist or not
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-
-    const alreadyRegistered = await RegisterUser.findOne({
-      user: userId,
-      event: eventId,
-    });
-
-    if (alreadyRegistered) {
-      return res.status(404).json({
-        success: false,
-        message: "User already registered for thiis event",
-      });
-    }
-
-    const newRegister = new RegisterUser({
-      name: user.name,
-      year: year,
-      prn: prn,
-      branch: user.branch,
-      email: user.email,
-      user: userId,
-      event: eventId,
-    });
-
-    await newRegister.save();
-
-    event.participants.push(newRegister._id);
-    await event.save();
-
-    user.event.push(eventId);
-    await user.save();
-
-    res.status(202).json({
-      message: "Registered successfully",
-      data: newRegister,
-      success: true,
-    });
-  } catch (err) {
-    res.status(500).json({ message: err.message, success: false });
-  }
-};
-
-const cancleRegistration = async (req, res) => {
-  try {
-    const { eventId } = req.params;
-    const { userId } = req.body;
-
-    const user = await User.findById(userId);
-    const event = await Event.findById(eventId);
-
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-    if (!event) {
-      return res.status(404).json({
-        success: false,
-        message: "Event not found",
-      });
-
-    }
-      const registerEvent = await RegisterUser.findOneAndDelete({
-      user: userId,
-      event: eventId,
-    });
-     if (!registerEvent) {
-      return res.status(404).json({
-        success: false,
-        message: "Registration cancelled successfully",
-      });
-    }
-    res.status(202).json({
-      message: "Registration cancle",
-      data: registerEvent,
-      success: true,
-    });
-
-  } catch (err) {
-    res.status(500).json({ message: err.message, success: false });
-  }
-};
 
 export {
   getEvents,
@@ -224,5 +118,6 @@ export {
   updateEvent,
   registerEvent,
   getParticularEvent,
-  cancleRegistration
+  cancelRegistration,
+  registeredEvents,
 };
