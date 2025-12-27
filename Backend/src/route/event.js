@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {addEvent,getEvents,deleteEvent,updateEvent,registerEvent,getParticularEvent,cancleRegistration,registiredEvents} from "../controllers/eventcontroller.js";
+import {addEvent,getEvents,deleteEvent,updateEvent,getParticularEvent} from "../controllers/eventcontroller.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 const router = Router();
 

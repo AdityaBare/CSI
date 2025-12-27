@@ -115,8 +115,7 @@ export {
   addEvent,
   deleteEvent,
   updateEvent,
-  registerEvent,
   getParticularEvent,
-  cancelRegistration,
-  registeredEvents,
+ 
+  
 };

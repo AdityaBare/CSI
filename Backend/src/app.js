@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import userRoute from "./route/user.js";
 import eventRoute from "./route/event.js";
-import registerRoute from "./route/registeration.js";
+import registerRoute from "./route/registration.js";
 import dotenv from "dotenv";
 
 dotenv.config();
