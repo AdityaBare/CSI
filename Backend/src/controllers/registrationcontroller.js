@@ -11,7 +11,6 @@ const registerEvent = async (req, res) => {
   try {
     const { eventId } = req.params;
 const userId = req.user.id;
-const { year, prn } = req.body;
     const event = await Event.findById(eventId);
 
     if (!event) {
@@ -45,10 +44,11 @@ const { year, prn } = req.body;
 
     const newRegister = new RegisterUser({
       name: user.name,
-      year: year,
-      prn: prn,
+      year:user.year,
+      prn: user.prn,
       branch: user.branch,
       email: user.email,
+      college:user.college,
       user: userId,
       event: eventId,
     });
@@ -127,7 +127,7 @@ const cancelRegistration = async (req, res) => {
 const registeredEvents = async (req, res) => {
   try {
     const userId = req.user.id;
-    const user = await User.findById(userId).populate("event","name date price location");
+    const user = await User.findById(userId).populate("event","name date prize location");
 
     if (!user) {
       return res.status(404).json({

@@ -26,6 +26,7 @@ const registerUserSchema = new Schema({
         ref:"User",
         required:true,
     },
+    college:{String},
     event:{
         type:Schema.Types.ObjectId,
         ref:"Event"

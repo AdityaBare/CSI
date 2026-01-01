@@ -3,7 +3,7 @@ import httpStatus from "http-status";
 
 const addEvent = async (req, res) => {
   try {
-    const { name, description, time, location, logo, status, date, price } =
+    const { name, description, time, location, logo, status, date, prize } =
       req.body; 
     const event = new Event({
       name,
@@ -11,7 +11,7 @@ const addEvent = async (req, res) => {
       location,
       date,
       time,
-      price,
+      prize,
       status,
       logo,
     });

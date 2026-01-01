@@ -12,6 +12,9 @@ const userModel = new Schema({
         unique:true
 
     },
+    year:{String},
+    college:{String},
+    prn:{String},
     branch:{ type:String},
     number:{
         type:String,

@@ -36,7 +36,7 @@ const login = async (req, res)=>{
 
 const signup = async (req, res)=>{
   
-    const {name, email , number , password , branch} = req.body;
+    const {name, email , number , password , branch,year,prn,college} = req.body;
 
     try{
         const existUser = await User.findOne({email});
@@ -52,6 +52,9 @@ const signup = async (req, res)=>{
             email:email,
             number:number,
             branch:branch,
+            year,
+            college,
+            prn,
             password:hashPassword
         });
 
@@ -82,5 +85,22 @@ const signup = async (req, res)=>{
 }
 
 
+const mySpace = async (req, res)=>{
 
-export {signup, login};
+    try{
+        const userId = req.user.id;
+        const user = await User.findById(userId).select("-password -token -event");
+        if(!user){
+            return res.status(httpStatus.NOT_FOUND).json({message:"User not found", success:false});
+        }
+        
+        res.status(httpStatus.OK).json({message:"User Found.",data:user,success:true});
+
+    }catch(err){
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message:err.message, success:false});
+    }
+}
+
+
+
+export {signup, login, mySpace};

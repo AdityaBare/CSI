@@ -24,7 +24,7 @@ const eventModel = new Schema({
         url:String,
         filename:String
     },
-    price:[String],
+    prize:[String],
     status:{
        type: String,
     enum:["upcoming", "ongoing", "completed", "cancelled"],
