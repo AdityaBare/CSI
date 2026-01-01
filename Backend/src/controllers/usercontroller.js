@@ -2,7 +2,9 @@ import brycpt from "bcrypt";
 import jwt from  "jsonwebtoken";
 import User from "../model/usermodel.js";
 import httpStatus from "http-status"
+import sendEmail from "../services/sendmail.js";
 
+import { welcomeEmailTemplate,loginAlertTemplate } from "../util/emailTemplate.js";
 
 const login = async (req, res)=>{
     const {email , number , password} = req.body;
@@ -27,6 +29,15 @@ const login = async (req, res)=>{
             sameSite: "lax",     
             maxAge: 120*60 * 60 * 1000});
         res.status(httpStatus.OK).json({message:"Login successfull", success:true});
+          setImmediate(()=>{
+            const time = new Date();
+        sendEmail(
+            email,
+            "Welcome to CSI",
+            loginAlertTemplate(user.name, time.toString().split(" GMT")[0])
+
+        );
+      })
 
     }catch(err){
          res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message:`Internal server error : ${err.message}`, success:false});
@@ -40,7 +51,7 @@ const signup = async (req, res)=>{
 
     try{
         const existUser = await User.findOne({email});
-        console.log(existUser);
+    
         if(existUser){
             return res.status(httpStatus.CONFLICT).json({message:"User already exist.", success:false});
         }
@@ -73,6 +84,15 @@ const signup = async (req, res)=>{
             maxAge: 120*60 * 60 * 1000});
 
       res.status(httpStatus.CREATED).json({message:"User is created", success:true});
+
+      setImmediate(()=>{
+        sendEmail(
+            email,
+            "Welcome to CSI",
+            welcomeEmailTemplate(user.name)
+
+        );
+      })
 
 
     }catch(err){
