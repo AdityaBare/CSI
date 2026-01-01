@@ -25,7 +25,7 @@ app.use("/",userRoute);
 app.listen(port, async ()=>{
     console.log("Server is working on port :",port);
 
-    mongoose.connect("mongodb+srv://bareaditya:csi_2028@cluster0.1uujtn4.mongodb.net/?appName=Cluster0")
+    mongoose.connect(process.env.MDB)
     .then(()=>{
         console.log("Data Base is connected");
     })
