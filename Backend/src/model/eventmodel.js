@@ -26,6 +26,7 @@ const eventModel = new Schema({
     },
     prize:[String],
     status:{
+        default:"upcoming",
        type: String,
     enum:["upcoming", "ongoing", "completed", "cancelled"],
     required: true

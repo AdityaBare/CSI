@@ -5,7 +5,7 @@ const router = Router();
 
 //API for CSI login
 router.route("/").get(authMiddleware,getEvents);
-router.route("/").post(authMiddleware,addEvent);
+router.route("/").post(addEvent);
 router.route("/:eventId").put(authMiddleware ,updateEvent);
 router.route("/:eventId").delete(authMiddleware ,deleteEvent);
 router.route("/:eventId").get(authMiddleware ,getParticularEvent);   //also for csi login

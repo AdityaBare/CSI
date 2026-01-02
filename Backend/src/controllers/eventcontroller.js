@@ -2,8 +2,9 @@ import Event from "../model/eventmodel.js";
 import httpStatus from "http-status";
 
 const addEvent = async (req, res) => {
+  console.log("AddEvent");
   try {
-    const { name, description, time, location, logo, status, date, prize } =
+    const { name, description, time, location, date } =
       req.body; 
     const event = new Event({
       name,
@@ -11,10 +12,9 @@ const addEvent = async (req, res) => {
       location,
       date,
       time,
-      prize,
-      status,
-      logo,
+     
     });
+    console.log(event);
 
     await event.save();
     res
