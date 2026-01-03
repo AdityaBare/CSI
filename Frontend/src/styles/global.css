@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Inter:wght@400;500&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: #ffffff;
+  background: transparent;
+  overflow-x: hidden;
+}
+
+/* 🌌 GLOBAL SPACE BACKGROUND */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+
+  background-image: url('/background.jpg'); /* ✅ correct */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  filter: brightness(0.55) contrast(1.1);
+  z-index: -1;
+}
+
