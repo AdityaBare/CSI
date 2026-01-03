@@ -8,6 +8,7 @@ function AddEvent() {
     time: "",
     location: "",
     description: "",
+    prize:""
   });
 
   const handelInput = (e) => {
@@ -36,6 +37,7 @@ function AddEvent() {
       time: "",
       location: "",
       description: "",
+      prize:""
     });
   };
 
@@ -113,6 +115,20 @@ function AddEvent() {
               placeholder="Enter Venue"
               name="location"
               value={formData.location}
+              onChange={handelInput}
+            />
+          </div>
+
+           <div className="mb-3">
+            <label htmlFor="Venue" className="form-label">
+              Prize
+            </label>
+            <input
+              className="form-control"
+              id="Venue"
+              placeholder="[1st, 2nd, 3rd]"
+              name="prize"
+              value={formData.prize}
               onChange={handelInput}
             />
           </div>

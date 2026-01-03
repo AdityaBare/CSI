@@ -2,9 +2,8 @@ import Event from "../model/eventmodel.js";
 import httpStatus from "http-status";
 
 const addEvent = async (req, res) => {
-  console.log("AddEvent");
   try {
-    const { name, description, time, location, date } =
+    const { name, description, time, location, date, prize } =
       req.body; 
     const event = new Event({
       name,
@@ -12,9 +11,9 @@ const addEvent = async (req, res) => {
       location,
       date,
       time,
+      prize,
      
     });
-    console.log(event);
 
     await event.save();
     res
@@ -80,6 +79,7 @@ const updateEvent = async (req, res) => {
 };
 
 const getEvents = async (req, res) => {
+
   try {
     const event = await Event.find();
     res.status(200).json({ success: true, data: event });

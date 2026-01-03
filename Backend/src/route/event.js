@@ -4,7 +4,7 @@ import authMiddleware from "../middleware/authMiddleware.js";
 const router = Router();
 
 //API for CSI login
-router.route("/").get(authMiddleware,getEvents);
+router.route("/").get(getEvents);
 router.route("/").post(addEvent);
 router.route("/:eventId").put(authMiddleware ,updateEvent);
 router.route("/:eventId").delete(authMiddleware ,deleteEvent);

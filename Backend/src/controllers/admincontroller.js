@@ -1,6 +1,9 @@
 import Admin from "../model/admin.js";
 import brycpt from "bcrypt";
 import httpStatus from "http-status"
+import RegisterUser from "../model/registerUser.js";
+import Event from "../model/eventmodel.js";
+
 
 const signup = async (req, res)=>{
   const {email , password}= req.body;
@@ -57,4 +60,32 @@ const login = async (req , res)=>{
     }
 }
 
-export {signup, login};
+const count = async (req, res)=>{
+  
+    try{
+
+        const totalEvent = await Event.countDocuments();
+        const totalRegistration = await RegisterUser.countDocuments();
+        const upcomingEvents = await Event.countDocuments({
+      status: "upcoming",
+    });
+    const completed = await Event.countDocuments({
+      status: "completed",
+    });
+
+    res.status(200).json({
+        success:true,
+        data:{
+            totalEvent,
+            totalRegistration,
+            upcomingEvents,
+            completed
+        }
+    })
+        
+    }
+    catch(err){
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message:err.message, success:false});
+    }
+}
+export {signup, login , count};
