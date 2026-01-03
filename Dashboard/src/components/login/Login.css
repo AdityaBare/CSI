@@ -1,0 +1,17 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+#nav{
+  
+  text-align: center;
+  height: 100px;
+  border: 10px;
+  /* color: red; */
+  background-color: rgb(241, 239, 239);
+  padding: 10px;
+  
+}
