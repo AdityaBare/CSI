@@ -108,7 +108,7 @@ const signup = async (req, res)=>{
 const mySpace = async (req, res)=>{
 
     try{
-        const userId = req.user.id;
+        const userId = req.body;
         const user = await User.findById(userId).select("-password -token -event");
         if(!user){
             return res.status(httpStatus.NOT_FOUND).json({message:"User not found", success:false});

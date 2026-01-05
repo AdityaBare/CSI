@@ -1,5 +1,6 @@
 import Event from "../model/eventmodel.js";
 import httpStatus from "http-status";
+import RegisterUser from "../model/registerUser.js";
 
 const addEvent = async (req, res) => {
   try {
@@ -28,7 +29,11 @@ const deleteEvent = async (req, res) => {
   try {
     const { eventId } = req.params;
 
-    const event = await Event.findByIdAndDelete(eventId);
+
+
+    const event = await Event.findById(eventId);
+
+  
 
     if (!event) {
       return res.status(404).json({
@@ -36,10 +41,23 @@ const deleteEvent = async (req, res) => {
         message: "Data not found",
       });
     }
+
+     if (event.participants.length > 0) {
+      await RegisterUser.deleteMany({
+        _id: { $in: event.participants },
+      });
+    }
+
+    // Delete the event itself
+    await Event.findByIdAndDelete(eventId);
+    const allEvents = await Event.find();
+
     res.status(200).json({
       success: true,
       message: "Data deleted successfully",
       data: event,
+      event :allEvents
+
     });
   } catch (error) {
     res.status(500).json({

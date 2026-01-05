@@ -1,8 +1,10 @@
 import "./Login.css"
 import axios from "axios"
 import { useState } from "react";
-function Login() {
+import { useNavigate } from "react-router-dom";
 
+function Login() {
+    const navigate = useNavigate();
     const [formData,setFormData] = useState({
         email:"",
         password:""
@@ -23,7 +25,11 @@ function Login() {
         await axios.post("http://localhost:8080/admin/login",formData, {
         withCredentials: true})
         .then((res)=>{
-            console.log(res.data);
+           
+          if(res.data.success){
+             navigate("/");
+          }
+
         })
         .catch((err)=>{
             console.log(err.message)

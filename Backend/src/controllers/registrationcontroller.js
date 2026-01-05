@@ -10,7 +10,7 @@ import mongoose from "mongoose";
 const registerEvent = async (req, res) => {
   try {
     const { eventId } = req.params;
-const userId = req.user.id;
+const {userId} = req.body;
     const event = await Event.findById(eventId);
 
     if (!event) {
@@ -38,7 +38,7 @@ const userId = req.user.id;
     if (alreadyRegistered) {
       return res.status(404).json({
         success: false,
-        message: "User already registered for thiis event",
+        message: "User already registered for this event",
       });
     }
 

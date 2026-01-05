@@ -3,7 +3,7 @@ import brycpt from "bcrypt";
 import httpStatus from "http-status"
 import RegisterUser from "../model/registerUser.js";
 import Event from "../model/eventmodel.js";
-
+import jwt from  "jsonwebtoken";
 
 const signup = async (req, res)=>{
   const {email , password}= req.body;
@@ -41,7 +41,6 @@ const login = async (req , res)=>{
     try{
         const user = await Admin.findOne({email});
 
-        console.log(user);
         if(!user){
             return res.status(httpStatus.NOT_FOUND).json({message:"User not found" , success:false});
         }
@@ -49,7 +48,20 @@ const login = async (req , res)=>{
         if(!isMatch){
             return res.status(httpStatus.UNAUTHORIZED).json({message:"Invalid password",success:false});
         }
-        console.log(user);
+        
+        
+              const token = jwt.sign(
+                {userId:user._id},
+                 process.env.JWT_SECRET,
+                { expiresIn: "1hr" }
+              );
+              
+                    res.cookie("accessToken", token, {
+                    httpOnly: true,
+                    secure: false,        
+                    sameSite: "lax",     
+                    maxAge: 60 *60*1000});
+
          res.status(httpStatus.OK).json({message:"Login successfull", success:true});
         
 
@@ -88,4 +100,24 @@ const count = async (req, res)=>{
         res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message:err.message, success:false});
     }
 }
-export {signup, login , count};
+
+
+const auth = (req, res) => {
+  const token = req.cookies.accessToken;
+
+  if (!token) {
+    return res.status(401).json({ message: "No token" ,success:false});
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.userId = decoded.userId;
+     
+    res.status(httpStatus.OK).json({success:true});
+  } catch (err) {
+    res.status(401).json({ message: "Invalid token" ,success:false});
+  }
+};
+
+export default auth;
+export {signup, login ,auth, count};
