@@ -21,19 +21,25 @@ function Login() {
 
     const handelSubmit = async (e)=>{
         e.preventDefault();
-
-        await axios.post("http://localhost:8080/admin/login",formData, {
+     try{
+       const res = await axios.post("http://localhost:8080/admin/login",formData, {
         withCredentials: true})
-        .then((res)=>{
-           
+        
+           alert(res.data.message);
           if(res.data.success){
              navigate("/");
           }
+          setFormData({
+               email:"",
+        password:""
 
-        })
-        .catch((err)=>{
-            console.log(err.message)
-        })
+          })
+
+     
+      }
+      catch(err){
+            alert(err.message)
+        }
 
     }
   return (
