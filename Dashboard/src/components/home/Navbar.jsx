@@ -1,4 +1,4 @@
-
+import {Link} from "react-router-dom"
 function Navbar() {
     return ( 
         <>
@@ -8,10 +8,11 @@ function Navbar() {
             <p className="fs-5 fw-bolder m-0  ">CSI Committee Admin Dashboard</p>
             <p className="text-muted">Manage events and track student registrations</p>
             </div>
-
+   <Link  to="/addEvent" className="text-light test-non">
         <button className="btn bg-primary text-light fs-5 ps-2 pe-2">
-            + Add Event
+        + Add Event
         </button>
+        </Link> 
 
 
   </div>

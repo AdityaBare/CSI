@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 function AddEvent() {
   const [formData, setFormData] = useState({
@@ -18,6 +20,7 @@ function AddEvent() {
     });
   };
 
+    const navigate = useNavigate();
   const handelSubmit = async (e) => {
      e.preventDefault();
     await axios
@@ -25,7 +28,9 @@ function AddEvent() {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res.data);
+          if(res.data.success){
+       return navigate("/");
+        }
       })
       .catch((err) => {
         console.log(err.message);
@@ -132,10 +137,11 @@ function AddEvent() {
               onChange={handelInput}
             />
           </div>
-
+       
           <button type="submit" className="btn btn-primary w-100">
             Submit
           </button>
+    
         </form>
       </div>
     </div>
